@@ -1,0 +1,21 @@
+{
+    "name": "airmoi/yii2-filebrowser",
+    "description": "Provide web based file browser ",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","filebrowser"],
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "airmoi",
+            "email": "airmoi@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "airmoi\\yii2filebrowser\\": ""
+        }
+    }
+}

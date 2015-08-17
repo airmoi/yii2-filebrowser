@@ -11,6 +11,7 @@ class Module extends \yii\base\Module
 
     public $tempDir;
     
+    private static $_config;
     
     public function init()
     {
@@ -38,10 +39,13 @@ class Module extends \yii\base\Module
     }
     
     public static function getConfig($token) {
-        if(!$config = Yii::$app->getSession()->get('yii2-filebrowser')[$token])
+        if(!empty(self::$_config))
+            return self::$_config;
+        
+        if(!self::$_config = Yii::$app->getSession()->get('yii2-filebrowser')[$token])
             throw new \yii\web\BadRequestHttpException('Invalid token provided');
         
-        return $config;
+        return self::$_config;
     }
     
     public static function scan($dir, $root = "", $rootName = ""){
@@ -90,5 +94,63 @@ class Module extends \yii\base\Module
 	
 	}
 	return $files;
+    }
+    
+    
+    public static function getAbsolutePath($token, $file) {
+        $config = Module::getConfig($token);
+        $relativePath = explode('/', trim($file));
+        array_shift($relativePath);
+        return $config['rootPath'].'/'. implode('/', $relativePath);
+    }
+    
+    /**
+     * Removes a directory (and all its content) recursively.
+     * @param string $dir the directory to be deleted recursively.
+     * @param array $options options for directory remove. Valid options are:
+     *
+     * - traverseSymlinks: boolean, whether symlinks to the directories should be traversed too.
+     *   Defaults to `false`, meaning the content of the symlinked directory would not be deleted.
+     *   Only symlink would be removed in that default case.
+     */
+    public static function removeDirectory($dir, $options = [])
+    {
+        if (!is_dir($dir)) {
+            return false;
+        }
+        if (isset($options['traverseSymlinks']) && $options['traverseSymlinks'] || !is_link($dir)) {
+            if (!($handle = opendir($dir))) {
+                return false;
+            }
+            while (($file = readdir($handle)) !== false) {
+                if ($file === '.' || $file === '..') {
+                    continue;
+                }
+                $path = $dir . DIRECTORY_SEPARATOR . $file;
+                if (is_dir($path)) {
+                    static::removeDirectory($path, $options);
+                } else {
+                    unlink($path);
+                }
+            }
+            closedir($handle);
+        }
+        if (is_link($dir)) {
+            return unlink($dir);
+        } else {
+            return rmdir($dir);
+        }
+    }
+    
+    public static function canDelete($token){
+        return self::getConfig($token)['permissions']['delete'];
+    }
+    
+    public static function canCreateDir($token){
+        return self::getConfig($token)['permissions']['createdir'];
+    }
+    
+    public static function canUpload($token){
+        return self::getConfig($token)['permissions']['upload'];
     }
 }

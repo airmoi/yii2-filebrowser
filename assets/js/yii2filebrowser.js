@@ -7,11 +7,26 @@
             breadcrumbs: ".breadcrumbs",
             items: ".items",
             route: "?r=filebrowser/browser/",
+            permissions: {
+                upload:false,
+                delete:false,
+                createdir:false,
+                subdir:true
+            },
         }, options);
         
         var filebrowser = $(this),
             breadcrumbs = filebrowser.find(settings.breadcrumbs),
             fileList = filebrowser.find(settings.items);
+    
+        //Remove uploadform if upload not allowed
+        if(!settings.permissions.upload){
+            filebrowser.find('.upload-box').remove();
+        }
+        //Remove new dir form if create Dir not allowed
+        if(!settings.permissions.createdir){
+            filebrowser.find('.newdir').remove();
+        }
 
         $.get(settings.route+'list&token='+settings.token, function(data) {
 
@@ -51,7 +66,7 @@
 		// We are using the "input" event which detects cut and paste
 		// in addition to keyboard input.
 
-		filebrowser.find('input').on('input', function(e){
+		filebrowser.find('.search input').on('input', function(e){
 
 			folders = [];
 			files = [];
@@ -104,7 +119,6 @@
 
 
 		// Clicking on folders
-
 		fileList.on('click', 'li.folders', function(e){
 			e.preventDefault();
 
@@ -136,10 +150,44 @@
 
 			window.location = settings.route + 'download&file=' + path + '+&token=' + settings.token;
 		});
+                
+                //Clicking on delete
+                fileList.on('click', 'button.delete', function(e){
+			e.preventDefault();
+                        e.stopPropagation();
+
+                        if(!settings.permissions.delete){
+                            alert("Vous ne pouvez pas supprimer de document");
+                            return false;
+                        }
+			var parent = $(this).parent()
+                        var path = parent.attr('href');
+                        
+                        var choice = false;
+                        if(parent.hasClass('folders')){
+                            choice = confirm("supprimer le dossier " + parent.find('.name').html() + " et tout son contenu ?");
+                        }
+                        else {
+                            choice = confirm("supprimer le fichier " + parent.find('.name').html() + "?");
+                        }
+                        
+                        if ( !choice ){
+                            alert("canceled");
+                            return false;
+                        }
+                        
+                        $.get(settings.route + 'delete&file=' + path + '+&token=' + settings.token, function(data){
+                            if(data.success){
+                                window.location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+			//window.location = settings.route + 'download&delete=' + path + '+&token=' + settings.token;
+		});
 
 
 		// Clicking on breadcrumbs
-
 		breadcrumbs.on('click', 'a', function(e){
 			e.preventDefault();
 
@@ -151,6 +199,54 @@
 			window.location.hash = encodeURIComponent(nextDir);
 
 		});
+                
+                //upload
+                filebrowser.find('.upload-box form').on('beforeSubmit', function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    var data = new FormData(document.getElementById($(this).attr('id')));
+                    
+                    console.log(data);
+                    
+                    $.ajax(settings.route + 'upload&token=' + settings.token + '&path=' + currentPath, {
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        data: data
+                    }).done(function(data){
+                         if(data.success){
+                                window.location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                    });
+                    return false;
+                })
+                
+                //new dir
+                filebrowser.find('.newdir form').on('beforeSubmit', function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    //$(this).attr('action', settings.route + 'createdir&token=' + settings.token + '&path=' + currentPath)
+                    var data = $(this).serializeArray();
+                    data.push({name: 'token', value: settings.token});
+                    data.push({name: 'path', value: currentPath});
+                    console.log(data);
+                    
+                    $.ajax( $(this).action, {
+                        type: 'get',
+                        data: data
+                    }).done(function(data){
+                         if(data.success){
+                                window.location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                    });
+                    return false;
+                })
 
 
 		// Navigates to the given hash (path)
@@ -307,15 +403,16 @@
 			}
 
 			if(scannedFolders.length) {
-
+                            var folderTemplate = filebrowser.find('#folder-tpl').html();
 				scannedFolders.forEach(function(f) {
-
+                                        
+                                        var item = $(folderTemplate);
+                                        
 					var itemsLength = f.items.length,
-						name = escapeHTML(f.name),
-						icon = '<span class="icon folder"></span>';
+						name = escapeHTML(f.name);
 
 					if(itemsLength) {
-						icon = '<span class="icon folder full"></span>';
+                                            item.find('span.icon').addClass('full');
 					}
 
 					if(itemsLength == 1) {
@@ -327,28 +424,42 @@
 					else {
 						itemsLength = 'Empty';
 					}
-
-					var folder = $('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'<span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
-					folder.appendTo(fileList);
+                                        item.find('a').attr({title:f.path, href:f.path});
+                                        item.find('.name').html(name);
+                                        item.find('.details').html(itemsLength);
+                                    
+                                        if(!settings.permissions.delete){
+                                            item.find('button.delete').remove();
+                                        }
+                                        
+					item.appendTo(fileList);
 				});
 
 			}
 
 			if(scannedFiles.length) {
-
+                                var fileTemplate = filebrowser.find('#file-tpl').html();
+                                
 				scannedFiles.forEach(function(f) {
+                                    var fileSize = bytesToSize(f.size),
+                                            name = escapeHTML(f.name),
+                                            fileType = name.split('.');
+                                            //icon = '<span class="icon file"></span>';
 
-					var fileSize = bytesToSize(f.size),
-						name = escapeHTML(f.name),
-						fileType = name.split('.'),
-						icon = '<span class="icon file"></span>';
+                                    fileType = fileType[fileType.length-1];
 
-					fileType = fileType[fileType.length-1];
+                                    var item = $(fileTemplate);
 
-					icon = '<span class="icon file f-'+fileType+'">.'+fileType+'</span>';
-
-					var file = $('<li class="files"><a href="'+ f.path+'" title="'+ f.path +'" class="files">'+icon+'<span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span></a></li>');
-					file.appendTo(fileList);
+                                    item.find('span.icon').addClass('f-'+fileType).html(fileType);
+                                    item.find('a').attr({title:f.path, href:f.path});
+                                    item.find('.name').html(name);
+                                    item.find('.details').html(fileSize);
+                                    
+                                    if(!settings.permissions.delete){
+                                        item.find('button.delete').remove();
+                                    }
+                                    
+                                    item.appendTo(fileList);
 				});
 
 			}

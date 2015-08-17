@@ -12,7 +12,7 @@ class FileBrowser extends \yii\base\Widget
 {
     public $rootPath;
     public $rootName;
-    public $permissions = ['upload' => false, 'delete' => false, 'createdir' => false, 'subdir' => false];
+    public $permissions = ['upload' => false, 'delete' => false, 'createdir' => false, 'subdir' => true];
     public $allowSearch = true;
     public $showBreadcrumbs = true;
     
@@ -35,7 +35,7 @@ class FileBrowser extends \yii\base\Widget
         
         $this->_token = Module::storeConfig(['rootPath' => $this->rootPath, 'rootName' => $this->rootName, 'permissions' => $this->permissions]);
         
-        $js = "\$('#{$this->id}').filebrowser({token:'{$this->_token}'})";
+        $js = "\$('#{$this->id}').filebrowser({token:'{$this->_token}', permissions:".json_encode($this->permissions)."})";
         $view->registerJs($js);
         
         return $this->render('widget', ['widget' =>$this]);

@@ -16,7 +16,7 @@
     "autoload": {
         "psr-4": {
             "airmoi\\yii2filebrowser\\": "",
-            "airmoi\\yii2filebrowser\\controllers": "controllers/"
+            "airmoi\\yii2filebrowser\\controllers\\": "controllers/"
         }
     },
     "repositories" :[

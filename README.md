@@ -28,4 +28,4 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 
 ```php
-<?= \airmoi\yii2filebrowser\AutoloadExample::widget(); ?>```
+<?= \airmoi\yii2filebrowser\FileBrowser::widget(); ?>```

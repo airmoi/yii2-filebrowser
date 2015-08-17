@@ -31,7 +31,12 @@ class BrowserController extends Controller {
             $model->path = Module::getAbsolutePath($token, $path); 
             if ($model->upload()) {
                 // file is uploaded successfully
-                return ['success' => true];
+                return ['success' => true, 'item' => [
+					"name" => $model->file->name,
+					"type" => "file",
+					"path" => $model->path . '/' . $model->file->name,
+					"size" => $model->file->size // Gets the size of this file
+				]];
             }
             
             return ['success' => false, 'message' => $model->getErrors('file')];
@@ -65,13 +70,18 @@ class BrowserController extends Controller {
     
     public function actionCreatedir($dirname, $path, $token){
         try {
-            $path = Module::getAbsolutePath($token, $path.'/'.$dirname);
+            $absPath = Module::getAbsolutePath($token, $path.'/'.$dirname);
             
             if( !Module::canCreateDir($token))
                 throw new \yii\web\UnauthorizedHttpException('Vous ne pouvez pas créer de dossier');
             
-            mkdir($path);
-            return ['success' => true];
+            mkdir($absPath);
+            return ['success' => true, 'item' => [
+					"name" => $dirname,
+					"type" => "folder",
+					"path" => $path.'/'.$dirname,
+					"items" => []
+				]];
         } catch(\Exception $e){
             return ['success' => false, 'message' => $e->getMessage() .$path  ];
         }

@@ -178,7 +178,9 @@
                         
                         $.get(settings.route + 'delete&file=' + path + '+&token=' + settings.token, function(data){
                             if(data.success){
-                                window.location.reload();
+                                deleteData(response, path);
+                                goto(window.location.hash);
+                                //window.location.reload();
                             } else {
                                 alert(data.message);
                             }
@@ -216,7 +218,8 @@
                         data: data
                     }).done(function(data){
                          if(data.success){
-                                window.location.reload();
+                                addItem(response,currentPath, data.item);
+                                goto(window.location.hash);
                             } else {
                                 alert(data.message);
                             }
@@ -230,17 +233,19 @@
                     e.stopPropagation();
                     
                     //$(this).attr('action', settings.route + 'createdir&token=' + settings.token + '&path=' + currentPath)
-                    var data = $(this).serializeArray();
-                    data.push({name: 'token', value: settings.token});
-                    data.push({name: 'path', value: currentPath});
+                    var formData = $(this).serializeArray();
+                    formData.push({name: 'token', value: settings.token});
+                    formData.push({name: 'path', value: currentPath});
                     console.log(data);
                     
                     $.ajax( $(this).action, {
                         type: 'get',
-                        data: data
+                        data: formData
                     }).done(function(data){
                          if(data.success){
-                                window.location.reload();
+                                addItem(response,currentPath, data.item);
+                                goto(window.location.hash);
+                                //window.location.reload();
                             } else {
                                 alert(data.message);
                             }
@@ -360,6 +365,30 @@
 			});
 			return {folders: folders, files: files};
 		}
+                
+                function addItem(data, path, item){
+                    data.forEach(function(d){
+                        if(d.path === path){
+                            d.items.push(item);
+                            return;
+                        }
+                        if(d.type === 'folder') {
+                            addItem(d.items,path, item);
+                        }
+                    })
+                }
+                
+                function deleteData(data, path){
+                    data.forEach(function(d, i){
+                        if(d.path === path){
+                            data.splice(i, 1);
+                            return;
+                        }
+                        if(d.type === 'folder') {
+                            deleteData(d.items,path);
+                        }
+                    })
+                }
 
 
 		// Render the HTML for the file manager

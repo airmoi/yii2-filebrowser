@@ -32,9 +32,9 @@ class BrowserController extends Controller {
             if ($model->upload()) {
                 // file is uploaded successfully
                 return ['success' => true, 'item' => [
-					"name" => $model->file->name,
+					"name" => $model->encodedName,
 					"type" => "file",
-					"path" => $model->path . '/' . $model->file->name,
+					"path" => $path . '/' . $model->encodedName,
 					"size" => $model->file->size // Gets the size of this file
 				]];
             }
@@ -58,13 +58,15 @@ class BrowserController extends Controller {
                 $r = Module::removeDirectory($path);
             }
             else {
-                if(!is_writable($path))
+                /*if(!is_writable($path))
+                    throw new \yii\web\UnauthorizedHttpException('Le fichier ' . basename($path) . ' n\'est pas modifiable');*/
+                if( !$r = unlink($path)){
                     throw new \yii\web\UnauthorizedHttpException('Le fichier ' . basename($path) . ' n\'est pas modifiable');
-                $r = unlink($path);
+                }
             }
             return ['success' => true];
         } catch(\Exception $e){
-            return ['success' => false, 'message' => $e->getMessage()];
+            return ['success' => false, 'message' => mb_convert_encoding($e->getMessage(), 'UTF-8' )];
         }
     }
     

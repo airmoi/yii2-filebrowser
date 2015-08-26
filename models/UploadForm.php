@@ -11,6 +11,7 @@ class UploadForm extends Model
      */
     public $file;
     public $path;
+    public $encodedName;
 
     public function rules()
     {
@@ -22,7 +23,8 @@ class UploadForm extends Model
     public function upload()
     {
         if ($this->validate()) {
-            $this->file->saveAs($this->path . '/' .$this->file->baseName . '.' . $this->file->extension);
+            $this->file->saveAs($this->path . '/' . mb_convert_encoding( $this->file->baseName, 'Windows-1252') . '.' . $this->file->extension);
+            $this->encodedName = utf8_encode(basename($this->path . '/' . mb_convert_encoding( $this->file->baseName, 'Windows-1252') . '.' . $this->file->extension));
             return true;
         } else {
             return false;

@@ -305,7 +305,7 @@
 
 				else {
 					currentPath = data.path;
-					breadcrumbsUrls.push(data.path);
+					breadcrumbsUrls = [data.path];
 					render(searchByPath(data.path));
 				}
 			}

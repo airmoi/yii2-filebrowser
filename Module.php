@@ -61,18 +61,18 @@ class Module extends \yii\base\Module
 	if(file_exists($dir)){
 	
 		foreach(scandir($dir) as $f) {
-		
+                        $encodedName = utf8_encode($f);
 			if(!$f || $f[0] == '.') {
 				continue; // Ignore hidden files
 			}
                         
-                        $path = $rootName . str_replace($root, '', $dir . '/' .$f);
+                        $path = $rootName . str_replace($root, '', $dir . '/' .$encodedName);
 			if(is_dir($dir . '/' . $f)) {
 
 				// The path is a folder
 
 				$files[] = array(
-					"name" => $f,
+					"name" => $encodedName,
 					"type" => "folder",
 					"path" => $path,
 					"items" => self::scan($dir . '/' . $f, $root, $rootName) // Recursively get the contents of the folder
@@ -84,7 +84,7 @@ class Module extends \yii\base\Module
 				// It is a file
 
 				$files[] = array(
-					"name" => $f,
+					"name" => $encodedName,
 					"type" => "file",
 					"path" => $path,
 					"size" => filesize($dir . '/' . $f) // Gets the size of this file
@@ -99,7 +99,7 @@ class Module extends \yii\base\Module
     
     public static function getAbsolutePath($token, $file) {
         $config = Module::getConfig($token);
-        $relativePath = explode('/', trim($file));
+        $relativePath = explode('/', trim(utf8_decode($file)));
         array_shift($relativePath);
         return $config['rootPath'].'/'. implode('/', $relativePath);
     }

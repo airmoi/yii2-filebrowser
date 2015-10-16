@@ -19,6 +19,12 @@ class UploadForm extends Model
             [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => ''],
         ];
     }
+    
+    public function attributeLabels() {
+        return [
+            'file' => 'Ajouter un fichier',
+        ];
+    }
 
     public function upload()
     {

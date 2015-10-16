@@ -30,7 +30,7 @@ class FileBrowserAssets extends AssetBundle {
     {
         $this->sourcePath = __DIR__ . '/assets';
         $this->js =  ['js/yii2filebrowser.js'];
-        $this->css =  ['css/styles.css'];
+        $this->css =  ['css/filebrowser.min.css'];
         parent::init();
     }
 }

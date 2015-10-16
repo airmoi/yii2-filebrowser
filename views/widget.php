@@ -8,16 +8,33 @@ use airmoi\yii2filebrowser\models\UploadForm;
 
 ?>
 <div class="filemanager" id="<?= $widget->id?>">
-    <?php if($widget->allowSearch) { 
-    ?><div class="search"><input type="search" placeholder="Rechercher..." /></div><?php }
+    <header>
+        <div class="row">
+            <?php 
+            if($widget->showBreadcrumbs) { 
+                ?><div class="breadcrumbs col-sm-8">
+                <h2 class="folderName">Dossier personnel</h2>
+            </div><?php 
+            } 
+            ?>
+            <div class="tools col-sm-4">
+                <?php if($widget->allowSearch) { ?><div class="search">
+                    <input class="form-control form-control-search" type="search" placeholder="Rechercher…">
+                </div><?php } ?>
+                <div class="items-view-switcher">
+                    <button class="btn btn-default active"><span class="fa fa-fw fa-th-large"></span></button>
+                    <button class="btn btn-default"><span class="fa fa-fw fa-th-list"></span></button>
+                </div>
+            </div>
+        </div>
 
-    if($widget->showBreadcrumbs) { ?><div class="breadcrumbs"></div><?php } ?>
-
-    <ul class="items"></ul>
+    </header>
+    
+    <ul class="items items-icons animated"></ul>
 
     <div class="nothingfound">
-            <div class="nofiles"></div>
-            <span>Aucun fichier.</span>
+        <div class="nofiles"></div>
+        <span>Aucun fichier.</span>
     </div>
     <div class="upload-box">
         <?php $form = ActiveForm::begin(['method'=>'post', 'options' => ['enctype' => 'multipart/form-data']]) ?>
@@ -30,10 +47,13 @@ use airmoi\yii2filebrowser\models\UploadForm;
     </div>
     <div class="newdir">
         <?php $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['filebrowser/browser/createdir']), 'method'=>'get']) ?>
-
-            <?= Html::input('text', 'dirname') ?>
-
-            <button>Submit</button>
+            <?= Html::label('Créer un dossier', 'dirname') ?>
+            <div class="input-group col-xs-8 col-sm-4">
+                <div class="input-group-btn">
+                    <?= Html::input('text', 'dirname', '', ['class'=>'form-control']) ?>
+                    <button class="btn btn-primary" type="submit">Envoyer</button>
+                </div>
+            </div>
 
         <?php ActiveForm::end() ?>
     </div>

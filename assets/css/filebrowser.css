@@ -1,0 +1,321 @@
+.filemanager .nothingfound,
+.filemanager .upload-box,
+.filemanager .newdir,
+.filemanager header {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+.filemanager header {
+  padding: 15px;
+}
+.filemanager header h2 {
+  line-height: 34px;
+}
+.filemanager header .search {
+  float: right;
+}
+.filemanager header .items-view-switcher {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  float: right;
+}
+.filemanager header .items-view-switcher > .btn {
+  position: relative;
+  float: left;
+}
+.filemanager header .items-view-switcher > .btn:hover,
+.filemanager header .items-view-switcher > .btn:focus,
+.filemanager header .items-view-switcher > .btn:active,
+.filemanager header .items-view-switcher > .btn.active {
+  z-index: 2;
+}
+.filemanager header .items-view-switcher .btn + .btn,
+.filemanager header .items-view-switcher .btn + .btn-group,
+.filemanager header .items-view-switcher .btn-group + .btn,
+.filemanager header .items-view-switcher .btn-group + .btn-group {
+  margin-left: -1px;
+}
+.filemanager .items {
+  padding-left: 0;
+  list-style: none;
+}
+.filemanager .items a {
+  position: relative;
+  display: block;
+}
+.filemanager .items a:hover {
+  text-decoration: none;
+  color: #5f5348;
+}
+.filemanager .items .icon {
+  display: block;
+  float: left;
+  white-space: nowrap;
+  text-align: center;
+}
+.filemanager .items .icon:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  left: 0;
+  position: absolute;
+  text-align: center;
+}
+.filemanager .items .icon.file:before {
+  content: "\f016";
+}
+.filemanager .items .icon.folder:before {
+  content: "\f07b";
+}
+.filemanager .items .name {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.filemanager .items .details {
+  color: #777777;
+}
+.filemanager .items .delete {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 0px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #fff;
+  background-color: #c4c4c4;
+  border-color: #c4c4c4;
+  position: absolute;
+  right: 0;
+}
+.filemanager .items .delete:focus,
+.filemanager .items .delete:active:focus,
+.filemanager .items .delete.active:focus,
+.filemanager .items .delete.focus,
+.filemanager .items .delete:active.focus,
+.filemanager .items .delete.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.filemanager .items .delete:hover,
+.filemanager .items .delete:focus,
+.filemanager .items .delete.focus {
+  color: #fff;
+  text-decoration: none;
+}
+.filemanager .items .delete:active,
+.filemanager .items .delete.active {
+  outline: 0;
+  background-image: none;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.filemanager .items .delete.disabled,
+.filemanager .items .delete[disabled],
+fieldset[disabled] .filemanager .items .delete {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  box-shadow: none;
+}
+a.filemanager .items .delete.disabled,
+fieldset[disabled] a.filemanager .items .delete {
+  pointer-events: none;
+}
+.filemanager .items .delete:focus,
+.filemanager .items .delete.focus {
+  color: #fff;
+  background-color: #aaaaaa;
+  border-color: #848484;
+}
+.filemanager .items .delete:hover {
+  color: #fff;
+  background-color: #aaaaaa;
+  border-color: #a5a5a5;
+}
+.filemanager .items .delete:active,
+.filemanager .items .delete.active,
+.open > .dropdown-toggle.filemanager .items .delete {
+  color: #fff;
+  background-color: #aaaaaa;
+  border-color: #a5a5a5;
+}
+.filemanager .items .delete:active:hover,
+.filemanager .items .delete.active:hover,
+.open > .dropdown-toggle.filemanager .items .delete:hover,
+.filemanager .items .delete:active:focus,
+.filemanager .items .delete.active:focus,
+.open > .dropdown-toggle.filemanager .items .delete:focus,
+.filemanager .items .delete:active.focus,
+.filemanager .items .delete.active.focus,
+.open > .dropdown-toggle.filemanager .items .delete.focus {
+  color: #fff;
+  background-color: #989898;
+  border-color: #848484;
+}
+.filemanager .items .delete:active,
+.filemanager .items .delete.active,
+.open > .dropdown-toggle.filemanager .items .delete {
+  background-image: none;
+}
+.filemanager .items .delete.disabled,
+.filemanager .items .delete[disabled],
+fieldset[disabled] .filemanager .items .delete,
+.filemanager .items .delete.disabled:hover,
+.filemanager .items .delete[disabled]:hover,
+fieldset[disabled] .filemanager .items .delete:hover,
+.filemanager .items .delete.disabled:focus,
+.filemanager .items .delete[disabled]:focus,
+fieldset[disabled] .filemanager .items .delete:focus,
+.filemanager .items .delete.disabled.focus,
+.filemanager .items .delete[disabled].focus,
+fieldset[disabled] .filemanager .items .delete.focus,
+.filemanager .items .delete.disabled:active,
+.filemanager .items .delete[disabled]:active,
+fieldset[disabled] .filemanager .items .delete:active,
+.filemanager .items .delete.disabled.active,
+.filemanager .items .delete[disabled].active,
+fieldset[disabled] .filemanager .items .delete.active {
+  background-color: #c4c4c4;
+  border-color: #c4c4c4;
+}
+.filemanager .items .delete .badge {
+  color: #c4c4c4;
+  background-color: #fff;
+}
+.filemanager .items-list {
+  padding: 5px 10px;
+  background-color: #fff;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.filemanager .items-list a {
+  padding: 8px 0;
+  line-height: 30px;
+}
+.filemanager .items-list li:not(:last-child) {
+  border-bottom: 1px solid #eeeeee;
+}
+.filemanager .items-list .icon {
+  font-size: 10px;
+  line-height: 35px;
+  width: 50px;
+  height: 30px;
+}
+.filemanager .items-list .icon:before {
+  font-size: 30px;
+  width: 50px;
+}
+.filemanager .items-list .name {
+  display: block;
+  float: left;
+  width: 60%;
+}
+@media (min-width: 768px) {
+  .filemanager .items-list .name {
+    width: 75%;
+  }
+}
+@media (min-width: 992px) {
+  .filemanager .items-list .name {
+    width: 80%;
+  }
+}
+@media (min-width: 1200px) {
+  .filemanager .items-list .name {
+    width: 85%;
+  }
+}
+.filemanager .items-list .details {
+  display: block;
+  float: left;
+}
+.filemanager .items-list .delete {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 0px;
+  top: 8px;
+}
+.filemanager .items-icons {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.filemanager .items-icons li {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 30px;
+}
+@media (min-width: 768px) {
+  .filemanager .items-icons li {
+    float: left;
+    width: 50%;
+  }
+}
+@media (min-width: 992px) {
+  .filemanager .items-icons li {
+    float: left;
+    width: 33.33333333%;
+  }
+}
+.filemanager .items-icons a {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100px;
+  padding: 15px 15px 15px 0px;
+  text-decoration: none;
+}
+.filemanager .items-icons .icon {
+  line-height: 75px;
+  width: 90px;
+  height: 70px;
+}
+.filemanager .items-icons .icon:before {
+  font-size: 70px;
+  width: 90px;
+}
+.filemanager .items-icons .name {
+  margin-top: 15px;
+  display: block;
+}
+.filemanager .items-icons .details {
+  display: block;
+}
+.filemanager .items-icons .delete {
+  bottom: 0;
+}
+.filemanager h2 {
+  color: #978676;
+  font-size: 19px;
+  margin: 0;
+}
+.filemanager label {
+  color: #978676;
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+.filemanager a {
+  color: #978676;
+}

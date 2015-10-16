@@ -4,7 +4,7 @@
         var settings = $.extend({
             // These are the defaults.
             token: "",
-            breadcrumbs: ".breadcrumbs",
+            breadcrumbs: ".breadcrumbs h2",
             items: ".items",
             route: "?r=filebrowser/browser/",
             permissions: {
@@ -554,6 +554,13 @@
 
         return this;
     };
+    
+    $('.items-view-switcher button').on('click', function(e){
+        $('ul.items').toggleClass('items-icons'); 
+        $('ul.items').toggleClass('items-list')
+        $('.items-view-switcher button.active').removeClass('active');
+        $(e.currentTarget).addClass('active')
+    })
 
 }(jQuery));
 

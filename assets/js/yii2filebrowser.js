@@ -220,6 +220,7 @@
                          if(data.success){
                                 addItem(response,currentPath, data.item);
                                 goto(window.location.hash);
+                                filebrowser.find('.upload-box form')[0].reset();
                             } else {
                                 alert(data.message);
                             }
@@ -245,6 +246,7 @@
                          if(data.success){
                                 addItem(response,currentPath, data.item);
                                 goto(window.location.hash);
+                                filebrowser.find('.newdir form')[0].reset();
                                 //window.location.reload();
                             } else {
                                 alert(data.message);

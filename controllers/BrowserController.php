@@ -7,6 +7,9 @@ use yii\helpers\FileHelper;
 use airmoi\yii2filebrowser\Module;
 use airmoi\yii2filebrowser\models\UploadForm;
 use yii\web\UploadedFile;
+
+use SuperClosure\Serializer;
+use SuperClosure\Analyzer\TokenAnalyzer;
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,24 +22,29 @@ class BrowserController extends Controller {
         if(!file_exists($path)){
             throw new \yii\web\NotFoundHttpException('Le fichier est introuvable');
         }
-        
         return Yii::$app->getResponse()->sendFile($path, basename($path));
     }
     
     public function actionUpload($token, $path){
-         $model = new UploadForm();
-         
+        $model = new UploadForm();
+        
+        $config = Module::getConfig($token);
+        $serializer = new Serializer(new TokenAnalyzer());
+        
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
             $model->path = Module::getAbsolutePath($token, $path); 
             if ($model->upload()) {
+                if($config['afterUpload'] !== null && is_callable($serializer->unserialize($config['afterUpload']))){
+                    call_user_func($serializer->unserialize($config['afterUpload']), ['absolutePath' => $model->path, 'filename' => $model->encodedName]);
+                }
                 // file is uploaded successfully
                 return ['success' => true, 'item' => [
-					"name" => $model->encodedName,
-					"type" => "file",
-					"path" => $path . '/' . $model->encodedName,
-					"size" => $model->file->size // Gets the size of this file
-				]];
+                    "name" => $model->encodedName,
+                    "type" => "file",
+                    "path" => $path . '/' . $model->encodedName,
+                    "size" => $model->file->size // Gets the size of this file
+                ]];
             }
             
             return ['success' => false, 'message' => $model->getErrors('file')];

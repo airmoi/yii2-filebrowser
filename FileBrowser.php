@@ -5,6 +5,9 @@ namespace airmoi\yii2filebrowser;
 use Yii;
 use airmoi\yii2filebrowser\Module;
 
+use SuperClosure\Serializer;
+use SuperClosure\Analyzer\TokenAnalyzer;
+
 /**
  * This is just an example.
  */
@@ -15,6 +18,13 @@ class FileBrowser extends \yii\base\Widget
     public $permissions = ['upload' => false, 'delete' => false, 'createdir' => false, 'subdir' => true];
     public $allowSearch = true;
     public $showBreadcrumbs = true;
+    
+    
+    public $afterUpload;
+    
+    public $afterDelete;
+    
+    public $afterCreateDir;
     
     private $_token;
     
@@ -33,7 +43,16 @@ class FileBrowser extends \yii\base\Widget
         $view = $this->getView();
         FileBrowserAssets::register($view);
         
-        $this->_token = Module::storeConfig(['rootPath' => $this->rootPath, 'rootName' => $this->rootName, 'permissions' => $this->permissions]);
+        $serializer = new Serializer(new TokenAnalyzer());
+        
+        $this->_token = Module::storeConfig([
+            'rootPath' => $this->rootPath, 
+            'rootName' => $this->rootName, 
+            'permissions' => $this->permissions,
+            'afterUpload' => is_callable($this->afterUpload) ? $serializer->serialize($this->afterUpload) : null,
+            'afterDelete' => is_callable($this->afterDelete) ? $serializer->serialize($this->afterDelete) : null,
+            'afterCreateDir' => is_callable($this->afterCreateDir) ? $serializer->serialize($this->afterCreateDir) : null,
+        ]);
         
         $js = "\$('#{$this->id}').filebrowser({token:'{$this->_token}', permissions:".json_encode($this->permissions)."})";
         $view->registerJs($js);

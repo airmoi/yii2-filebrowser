@@ -207,9 +207,18 @@
                     e.preventDefault();
                     e.stopPropagation();
                     
+                    var filename = $('#uploadform-file')[0].files[0].name || null;
+                    var pathItems = searchByPath(currentPath);
+                    var exists = false;
+                    if( exists = $.map(pathItems, function(obj, index) {if(obj.name == filename) {return index;}})[0]){
+                        if(!confirm("Un fichier du meme nom existe déjà dans ce dossier, souhaitez-vous le remplacer ?")){
+                            return false;
+                        }
+                    }
                     var data = new FormData(document.getElementById($(this).attr('id')));
                     
-                    console.log(data);
+                    $("#upload-file-form").hide();
+                    $("#upload-progress").show();
                     
                     $.ajax(settings.route + 'upload&token=' + settings.token + '&path=' + currentPath, {
                         processData: false,
@@ -217,13 +226,20 @@
                         type: 'POST',
                         data: data
                     }).done(function(data){
-                         if(data.success){
-                                addItem(response,currentPath, data.item);
-                                goto(window.location.hash);
-                                filebrowser.find('.upload-box form')[0].reset();
-                            } else {
-                                alert(data.message);
-                            }
+                            if(data.success){
+                               if(!exists)  {
+                                    addItem(response,currentPath, data.item);
+                                } else {
+                                    updateItem(response,currentPath, data.item);
+                                }
+                           goto(window.location.hash);
+                           filebrowser.find('.upload-box form')[0].reset();
+                            
+                        } else {
+                            alert(data.message);
+                        }
+                        $("#upload-file-form").show();
+                        $("#upload-progress").hide();
                     });
                     return false;
                 })
@@ -237,7 +253,6 @@
                     var formData = $(this).serializeArray();
                     formData.push({name: 'token', value: settings.token});
                     formData.push({name: 'path', value: currentPath});
-                    console.log(data);
                     
                     $.ajax( $(this).action, {
                         type: 'get',
@@ -376,6 +391,16 @@
                         }
                         if(d.type === 'folder') {
                             addItem(d.items,path, item);
+                        }
+                    })
+                }
+                
+                function updateItem(data, path, item){
+                    data.forEach(function(d){
+                        if(d.path === path){
+                            var i = $.map(d.items, function(obj, index) {if(obj.name == item.name) {return index;}})[0];
+                            d.items[i]=item;
+                            return;
                         }
                     })
                 }

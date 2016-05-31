@@ -37,13 +37,23 @@ use airmoi\yii2filebrowser\models\UploadForm;
         <span>Aucun fichier.</span>
     </div>
     <div class="upload-box">
-        <?php $form = ActiveForm::begin(['method'=>'post', 'options' => ['enctype' => 'multipart/form-data']]) ?>
+        <?php $form = ActiveForm::begin(['id' => "upload-file-form", 'method'=>'post', 'options' => ['enctype' => 'multipart/form-data']]) ?>
 
             <?= $form->field(new UploadForm(), 'file')->fileInput() ?>
 
             <button>Submit</button>
-
+            
         <?php ActiveForm::end() ?>
+        <div class="row">
+            <div id="upload-progress" class="col-lg-6" style="display:none">
+                <p>Envoi de votre fichier en cours...</p>
+                <div class="progress" >
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                      <span class="sr-only">Upload en cours...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="newdir">
         <?php $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['filebrowser/browser/createdir']), 'method'=>'get']) ?>

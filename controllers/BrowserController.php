@@ -36,7 +36,7 @@ class BrowserController extends Controller {
             $model->path = Module::getAbsolutePath($token, $path); 
             if ($model->upload()) {
                 if($config['afterUpload'] !== null && is_callable($serializer->unserialize($config['afterUpload']))){
-                    call_user_func($serializer->unserialize($config['afterUpload']), ['absolutePath' => $model->path, 'filename' => $model->encodedName]);
+                    $success = call_user_func($serializer->unserialize($config['afterUpload']), ['absolutePath' => $model->path, 'filename' => $model->encodedName]);
                 }
                 // file is uploaded successfully
                 return ['success' => true, 'item' => [

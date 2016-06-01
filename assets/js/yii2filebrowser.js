@@ -176,7 +176,7 @@
                             return false;
                         }
                         
-                        $.get(settings.route + 'delete&file=' + path + '+&token=' + settings.token, function(data){
+                        $.get(settings.route + 'delete&file=' + encodeURIComponent(path) + '+&token=' + settings.token, function(data){
                             if(data.success){
                                 deleteData(response, path);
                                 goto(window.location.hash);

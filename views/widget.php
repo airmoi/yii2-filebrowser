@@ -36,6 +36,21 @@ use airmoi\yii2filebrowser\models\UploadForm;
         <div class="nofiles"></div>
         <span>Aucun fichier.</span>
     </div>
+    
+    
+    <div class="newdir">
+        <?php $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['filebrowser/browser/createdir']), 'method'=>'get']) ?>
+            <?= Html::label('Créer un dossier', 'dirname') ?>
+            <div class="input-group col-xs-8 col-sm-4">
+                <div class="input-group-btn">
+                    <?= Html::input('text', 'dirname', '', ['class'=>'form-control']) ?>
+                    <button class="btn btn-primary" type="submit">Envoyer</button>
+                </div>
+            </div>
+
+        <?php ActiveForm::end() ?>
+    </div>
+    
     <div class="upload-box">
         <?php $form = ActiveForm::begin(['id' => "upload-file-form", 'method'=>'post', 'options' => ['enctype' => 'multipart/form-data']]) ?>
 
@@ -54,18 +69,6 @@ use airmoi\yii2filebrowser\models\UploadForm;
                 </div>
             </div>
         </div>
-    </div>
-    <div class="newdir">
-        <?php $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['filebrowser/browser/createdir']), 'method'=>'get']) ?>
-            <?= Html::label('Créer un dossier', 'dirname') ?>
-            <div class="input-group col-xs-8 col-sm-4">
-                <div class="input-group-btn">
-                    <?= Html::input('text', 'dirname', '', ['class'=>'form-control']) ?>
-                    <button class="btn btn-primary" type="submit">Envoyer</button>
-                </div>
-            </div>
-
-        <?php ActiveForm::end() ?>
     </div>
     
     <div id="folder-tpl" style="display:none">

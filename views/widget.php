@@ -43,8 +43,8 @@ use airmoi\yii2filebrowser\models\UploadForm;
             <?= Html::label('Créer un dossier', 'dirname') ?>
             <div class="input-group col-xs-8 col-sm-4">
                 <div class="input-group-btn">
-                    <?= Html::input('text', 'dirname', '', ['class'=>'form-control']) ?>
-                    <button class="btn btn-primary" type="submit">Envoyer</button>
+                    <?= Html::input('text', 'dirname', '', ['class'=>'form-control', 'required' => 'required']) ?>
+                    <button class="btn btn-primary" type="submit">Créer</button>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@ use airmoi\yii2filebrowser\models\UploadForm;
 
             <?= $form->field(new UploadForm(), 'file')->fileInput() ?>
 
-            <button>Submit</button>
+            <button>Envoyer</button>
             
         <?php ActiveForm::end() ?>
         <div class="row">

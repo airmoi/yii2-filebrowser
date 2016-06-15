@@ -67,7 +67,7 @@
 }
 .filemanager .items a:hover {
   text-decoration: none;
-  color: #516911;
+  color: #460826;
 }
 .filemanager .items .icon {
   display: block;
@@ -330,15 +330,15 @@ fieldset[disabled] .filemanager .items .delete.active {
   bottom: 0;
 }
 .filemanager h2 {
-  color: #95c11f;
+  color: #a21258;
   font-size: 19px;
   margin: 0;
 }
 .filemanager label {
-  color: #95c11f;
+  color: #a21258;
   font-size: 16px;
   margin: 0 0 10px;
 }
 .filemanager a {
-  color: #95c11f;
+  color: #a21258;
 }

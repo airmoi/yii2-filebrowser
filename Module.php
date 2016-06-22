@@ -62,11 +62,12 @@ class Module extends \yii\base\Module
 	
 		foreach(scandir($dir) as $f) {
                         $encodedName = utf8_encode($f);
+                        $encodedDir = utf8_encode($dir) ;
 			if(!$f || $f[0] == '.') {
 				continue; // Ignore hidden files
 			}
                         
-                        $path = $rootName . str_replace($root, '', $dir . '/' .$encodedName);
+                        $path = $rootName . str_replace($root, '', $encodedDir . '/' .$encodedName);
 			if(is_dir($dir . '/' . $f)) {
 
 				// The path is a folder

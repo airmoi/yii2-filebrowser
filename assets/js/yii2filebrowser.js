@@ -164,7 +164,7 @@
 
 			var path = $(this).find('a.files').attr('href');
 
-			window.location = getRoute('download', {path:path}); //settings.route + 'download&file=' + path + '+&token=' + settings.token;
+			window.location = getRoute('download', {file:path}); //settings.route + 'download&file=' + path + '+&token=' + settings.token;
 		});
                 
                 //Clicking on delete

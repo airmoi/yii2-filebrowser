@@ -7,6 +7,7 @@
             breadcrumbs: ".breadcrumbs h2",
             items: ".items",
             route: "?r=filebrowser/browser/",
+            prettyUrl:false,
             permissions: {
                 upload:false,
                 delete:false,
@@ -14,6 +15,21 @@
                 subdir:true
             },
         }, options);
+        
+        
+        function getRoute(action, params) {
+            var url;
+            params = params || {};
+            if (settings.prettyUrl){
+                url = settings.route + '/' + action + '?token=' + settings.token;
+            } else {
+                url = settings.route + action + '&token=' + settings.token;
+            }
+            for (var param in params) {
+                url += '&' + param + '=' + params[param];
+            }
+            return url;
+        }
         
         var filebrowser = $(this),
             breadcrumbs = filebrowser.find(settings.breadcrumbs),
@@ -28,7 +44,7 @@
             filebrowser.find('.newdir').remove();
         }
 
-        $.get(settings.route+'list&token='+settings.token, function(data) {
+        $.get( getRoute('list'), function(data) {
 
 		var response = [data],
 			currentPath = '',
@@ -148,7 +164,7 @@
 
 			var path = $(this).find('a.files').attr('href');
 
-			window.location = settings.route + 'download&file=' + path + '+&token=' + settings.token;
+			window.location = getRoute('download', {path:path}); //settings.route + 'download&file=' + path + '+&token=' + settings.token;
 		});
                 
                 //Clicking on delete
@@ -176,7 +192,7 @@
                             return false;
                         }
                         
-                        $.get(settings.route + 'delete&file=' + encodeURIComponent(path) + '+&token=' + settings.token, function(data){
+                        $.get(getRoute('delete', {file:encodeURIComponent(path)}), function(data){
                             if(data.success){
                                 deleteData(response, path);
                                 goto(window.location.hash);
@@ -220,7 +236,7 @@
                     $("#upload-file-form").hide();
                     $("#upload-progress").show();
                     
-                    $.ajax(settings.route + 'upload&token=' + settings.token + '&path=' + currentPath, {
+                    $.ajax(getRoute('upload', {path:currentPath}), {
                         processData: false,
                         contentType: false,
                         type: 'POST',
@@ -337,6 +353,7 @@
 			}
 			return path;
 		}
+                
 
 
 		// Locates a file by path

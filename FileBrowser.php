@@ -53,8 +53,14 @@ class FileBrowser extends \yii\base\Widget
             'afterDelete' => is_callable($this->afterDelete) ? $serializer->serialize($this->afterDelete) : null,
             'afterCreateDir' => is_callable($this->afterCreateDir) ? $serializer->serialize($this->afterCreateDir) : null,
         ]);
-        
-        $js = "\$('#{$this->id}').filebrowser({token:'{$this->_token}', permissions:".json_encode($this->permissions)."})";
+        $params = [
+            'token' => $this->_token,
+            'permissions' => $this->permissions,
+            'route' => \yii\helpers\Url::to(['filebrowser/browser']),
+            'prettyUrl' => Yii::$app->urlManager->enablePrettyUrl,
+        ];
+        $js = "\$('#{$this->id}')
+            .filebrowser(".  json_encode($params).")";
         $view->registerJs($js);
         
         return $this->render('widget', ['widget' =>$this]);

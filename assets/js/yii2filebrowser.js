@@ -270,7 +270,7 @@
                     formData.push({name: 'token', value: settings.token});
                     formData.push({name: 'path', value: currentPath});
                     
-                    $.ajax( $(this).action, {
+                    $.ajax( this.action, {
                         type: 'get',
                         data: formData
                     }).done(function(data){

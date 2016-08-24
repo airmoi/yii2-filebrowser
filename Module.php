@@ -88,7 +88,7 @@ class Module extends \yii\base\Module
 					"name" => $encodedName,
 					"type" => "file",
 					"path" => $path,
-					"size" => filesize($dir . '/' . $f) // Gets the size of this file
+					"size" => @filesize($dir . '/' . $f) // Gets the size of this file
 				);
 			}
 		}

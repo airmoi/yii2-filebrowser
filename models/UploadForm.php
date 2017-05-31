@@ -29,9 +29,11 @@ class UploadForm extends Model
     public function upload()
     {
         if ($this->validate()) {
-            $encodedPath = utf8_decode($this->path . '/' . $this->file->getBaseName(). '.' . $this->file->getExtension());
-            $this->file->saveAs($encodedPath);
-            $this->encodedName =  $this->file->getBaseName(). '.' . $this->file->getExtension();
+            // #9407 : normalize filename (prevent special chars issues)
+            $filename = \Normalizer::normalize($this->file->getBaseName(). '.' . $this->file->getExtension());
+            $encodedPath = $this->path . '/' . $filename;
+            $this->file->saveAs(mb_convert_encoding($encodedPath, 'WINDOWS-1252'));
+            $this->encodedName =  $filename;
             return true;
         } else {
             return false;

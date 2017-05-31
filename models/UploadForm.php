@@ -29,8 +29,9 @@ class UploadForm extends Model
     public function upload()
     {
         if ($this->validate()) {
-            $this->file->saveAs($this->path . '/' . $this->file->getBaseName());
-            $this->encodedName = utf8_encode(basename($this->path . '/' . $this->file->getBaseName()));
+            $encodedPath = utf8_decode($this->path . '/' . $this->file->getBaseName(). '.' . $this->file->getExtension());
+            $this->file->saveAs($encodedPath);
+            $this->encodedName =  $this->file->getBaseName(). '.' . $this->file->getExtension();
             return true;
         } else {
             return false;

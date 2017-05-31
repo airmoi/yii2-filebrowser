@@ -12,7 +12,8 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "jeremeamia/superclosure": "^2.0"
+        "jeremeamia/superclosure": "^2.0",
+        "ext-intl": "*"
     },
     "autoload": {
         "psr-4": {
